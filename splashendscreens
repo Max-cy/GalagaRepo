@@ -116,7 +116,7 @@ var Button = function(config) {
 };
 
 Button.prototype.draw = function() {
-    fill(169, 143, 247);
+    fill(42, 0, 166);
     rect(this.x, this.y, this.width, this.height, 5);
     fill(0, 0, 0);
     textSize(45);
@@ -148,7 +148,7 @@ var startButton = new Button({
 });
 var splashScreen = function() //splash screen function, scene: 0
 {
-    background(11, 17, 43);
+    background(0, 0, 0);
     for (var i = 0; i < xPositions.length; i++) 
         {
             noStroke(); // no outline for the raindrops
@@ -183,11 +183,22 @@ var splashScreen = function() //splash screen function, scene: 0
     startButton.draw();
     drawBitmoji(2,-13,50); //Isabella's bitmoji
     drawbit(264,-13,115); //Todd's bitmoji
+    fill(255, 255, 255);
+    textSize(12);
+    text("By: Todd Maxcy & Isabella Morgan",200,380,300,100);
+    fill(0, 179, 87);
+    textSize(15);
+    text("INSERT COIN",138,251,100,100);
+    fill(255, 0, 0);
+    text("CREDIT: 50",7,380,100,100);
+    textSize(10);
+    text("namco '81", 200,202,100,100);
+    
 };
 
 var endScreen = function()
 {
-    background(11, 17, 43);
+    background(0, 0, 0);
     for (var i = 0; i < xPositions.length; i++) 
         {
             noStroke(); // no outline for the raindrops
