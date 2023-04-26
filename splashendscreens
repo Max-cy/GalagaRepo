@@ -1,0 +1,224 @@
+//global variables
+var xPositions=[];
+var yPositions=[];
+var numStars = 100;
+var starColor = [];
+var currentScene = 0;
+var startTime = [];
+var score =[];
+var starSpeed = 4;
+
+for (var i = 1; i <= numStars; ++i) // stars details
+{
+    xPositions.push(round(random(10,390)));
+    yPositions.push(round(random(10,390)));
+    starColor.push(color(random(0,255),random(0,255),random(0,255))); //variety of colors
+}
+
+var drawbit= function(x,y,h) {
+    noStroke();
+fill(255, 243, 204);
+ellipse(x+(h/150*100),y+(h/150*100),(h/150*83),(h/150*101));
+noStroke();
+fill(184, 149, 83);
+arc(x+(h/150*100),y+(h/150*69),(h/150*90),(h/150*30),-30,220);
+ellipse(x+(h/150*65),y+(h/150*90),(h/150*10),(h/150*40));
+ellipse(x+(h/150*135),y+(h/150*90),(h/150*10),(h/150*40));
+fill(255, 0, 255);
+ellipse(x+(h/150*100),y+(h/150*60),(h/150*100),(h/150*20));
+quad(x+(h/150*60), y+(h/150*60), x+(h/150*140), y+(h/150*60), x+(h/150*120), y+(h/150*30), x+(h/150*80), y+(h/150*30));
+fill(5, 128, 95);
+ellipse(x+(h/150*115),y+(h/150*90),(h/150*10),(h/150*10));
+ellipse(x+(h/150*85),y+(h/150*90),(h/150*10),(h/150*10));
+fill(0, 0, 0);
+ellipse(x+(h/150*115),y+(h/150*90),(h/150*5),(h/150*5));
+ellipse(x+(h/150*85),y+(h/150*90),(h/150*5),(h/150*5));
+stroke(0, 0, 0);
+fill(255,243,204);
+arc(x+(h/150*95),y+(h/150*110),(h/150*30),(h/150*30),-60,20);
+fill(255, 255, 255);
+arc(x+(h/150*100),y+(h/150*120),(h/150*40),(h/150*20),-2,180);
+line(x+(h/150*80),y+(h/150*120),x+(h/150*120),y+(h/150*120));
+}; // Todd's bitmoji function
+
+var drawBitmoji=function(x,y,bitmojiHeight) // Isabella's bitmoji function
+{
+    //start of bitmoji
+    fill(26, 2, 2);
+    ellipse(x+(bitmojiHeight/100*100),y+(bitmojiHeight/100*90),bitmojiHeight/100*90,bitmojiHeight/100*100);
+    rect(x+(bitmojiHeight/100*55),y+(bitmojiHeight/100*101),bitmojiHeight/100*90,bitmojiHeight/100*100);
+    fill(255, 219, 172);
+    noStroke();
+    rect(x+(bitmojiHeight/100*87),y+(bitmojiHeight/100*147),bitmojiHeight/100*24,bitmojiHeight/100*53); //neck  
+    stroke(13, 6, 6);
+    ellipse(x+(bitmojiHeight/100*100),y+(bitmojiHeight/100*100),bitmojiHeight/100*83,bitmojiHeight/100*100); //head 
+    noStroke();
+    fill(255, 219, 172); //skin color
+    quad(x+(bitmojiHeight/100*87),y+(bitmojiHeight/100*167),x+(bitmojiHeight/100*113),y+(bitmojiHeight/100*168),x+(bitmojiHeight/100*146),y+(bitmojiHeight/100*202),x+(bitmojiHeight/100*54),y+(bitmojiHeight/100*204)); //shoulders/chest
+    stroke(10, 0, 0);
+    fill(255, 219, 172); //skin color
+    triangle(x+(bitmojiHeight/100*84),y+(bitmojiHeight/100*169),x+(bitmojiHeight/100*114),y+(bitmojiHeight/100*169),x+(bitmojiHeight/100*99),y+(bitmojiHeight/100*192));
+    stroke(5, 0, 0); //eye outline
+    fill(247, 244, 244);
+    ellipse(x+(bitmojiHeight/100*82),y+(bitmojiHeight/100*100),bitmojiHeight/100*19,bitmojiHeight/100*6); //left eye
+    ellipse(x+(bitmojiHeight/100*118),y+(bitmojiHeight/100*100),bitmojiHeight/100*19,bitmojiHeight/100*6); //right eye
+    fill(80, 99, 54); // eye color
+    ellipse(x+(bitmojiHeight/100*82),y+(bitmojiHeight/100*100),bitmojiHeight/100*4,bitmojiHeight/100*6); // iris
+    ellipse(x+(bitmojiHeight/100*118),y+(bitmojiHeight/100*100),bitmojiHeight/100*4,bitmojiHeight/100*6); //iris
+    fill(26, 2, 2); //hair color
+    line(x+(bitmojiHeight/100*80),y+(bitmojiHeight/100*98),x+(bitmojiHeight/100*77),y+(bitmojiHeight/100*94)); //eyelashes
+    line(x+(bitmojiHeight/100*76),y+(bitmojiHeight/100*98),x+(bitmojiHeight/100*74),y+(bitmojiHeight/100*94));
+    line(x+(bitmojiHeight/100*72),y+(bitmojiHeight/100*98),x+(bitmojiHeight/100*70),y+(bitmojiHeight/100*94));
+    line(x+(bitmojiHeight/100*123),y+(bitmojiHeight/100*98),x+(bitmojiHeight/100*128),y+(bitmojiHeight/100*94));
+    line(x+(bitmojiHeight/100*128),y+(bitmojiHeight/100*99),x+(bitmojiHeight/100*131),y+(bitmojiHeight/100*96));
+    line(x+(bitmojiHeight/100*118),y+(bitmojiHeight/100*98),x+(bitmojiHeight/100*123),y+(bitmojiHeight/100*94));
+    bezier(x+(bitmojiHeight/100*48), y+(bitmojiHeight/100*164), x+(bitmojiHeight/100*89), y+(bitmojiHeight/100*101), x+(bitmojiHeight/100*53), y+(bitmojiHeight/100*42), x+(bitmojiHeight/100*76), y+(bitmojiHeight/100*55)); //hair strands
+    bezier(x+(bitmojiHeight/100*52), y+(bitmojiHeight/100*191), x+(bitmojiHeight/100*73), y+(bitmojiHeight/100*125), x+(bitmojiHeight/100*52), y+(bitmojiHeight/100*36), x+(bitmojiHeight/100*70), y+(bitmojiHeight/100*67));
+    bezier(x+(bitmojiHeight/100*53), y+(bitmojiHeight/100*168), x+(bitmojiHeight/100*89), y+(bitmojiHeight/100*101), x+(bitmojiHeight/100*53), y+(bitmojiHeight/100*42), x+(bitmojiHeight/100*58), y+(bitmojiHeight/100*91));
+    bezier(x+(bitmojiHeight/100*146), y+(bitmojiHeight/100*241), x+(bitmojiHeight/100*188), y+(bitmojiHeight/100*6), x+(bitmojiHeight/100*77), y+(bitmojiHeight/100*53), x+(bitmojiHeight/100*134), y+(bitmojiHeight/100*59));
+    noStroke(); 
+    fill(255, 219, 172); //hair color
+    //bezier(122, 66, 128, 48, 145, 114, 130, 124); //hair strands
+    fill(23, 20, 20); //shirt color (black)
+    rect(x+(bitmojiHeight/100*56),y+(bitmojiHeight/100*198),bitmojiHeight/100*91,bitmojiHeight/100*26); //shirt
+    fill(255, 255, 255);
+    text("IM",x+(bitmojiHeight/100*91),y+(bitmojiHeight/100*207),bitmojiHeight/100*355,bitmojiHeight/100*83);
+    stroke(5, 0, 0);
+    fill(255, 219, 172);
+    arc(x+(bitmojiHeight/100*82),y+(bitmojiHeight/100*90),bitmojiHeight/100*26,bitmojiHeight/100*5,202,334); //left eyebrow
+    arc(x+(bitmojiHeight/100*118),y+(bitmojiHeight/100*89),bitmojiHeight/100*27,bitmojiHeight/100*5,214,372); //right eyebrow
+    ellipse(x+(bitmojiHeight/100*99),y+(bitmojiHeight/100*118),bitmojiHeight/100*13,bitmojiHeight/100*6); //nose
+    noStroke();
+    fill(255, 130, 180); //lip color
+    ellipse(x+(bitmojiHeight/100*99),y+(bitmojiHeight/100*132),bitmojiHeight/100*21,bitmojiHeight/100*11); //lips
+    stroke(26, 19, 19); //smile line
+    arc(x+(bitmojiHeight/100*86),y+(bitmojiHeight/100*129),bitmojiHeight/100*101,bitmojiHeight/100*6,58,92); //smile line
+    fill(117, 22, 43); //necklace color
+    ellipse(x+(bitmojiHeight/100*99),y+(bitmojiHeight/100*197),bitmojiHeight/100*11,bitmojiHeight/100*12); //necklace shap3
+    fill(181, 23, 113); //flower color
+    ellipse(x+(bitmojiHeight/100*57),y+(bitmojiHeight/100*64),bitmojiHeight/100*15,bitmojiHeight/100*15); //flower petals
+    ellipse(x+(bitmojiHeight/100*78),y+(bitmojiHeight/100*64),bitmojiHeight/100*15,bitmojiHeight/100*15);
+    ellipse(x+(bitmojiHeight/100*62),y+(bitmojiHeight/100*75),bitmojiHeight/100*15,bitmojiHeight/100*15);
+    ellipse(x+(bitmojiHeight/100*74),y+(bitmojiHeight/100*74),bitmojiHeight/100*15,bitmojiHeight/100*15);
+    ellipse(x+(bitmojiHeight/100*63),y+(bitmojiHeight/100*56),bitmojiHeight/100*15,bitmojiHeight/100*15);
+    ellipse(x+(bitmojiHeight/100*74),y+(bitmojiHeight/100*56),bitmojiHeight/100*15,bitmojiHeight/100*15);
+    fill(255, 237, 171);
+    ellipse(x+(bitmojiHeight/100*68),y+(bitmojiHeight/100*64),bitmojiHeight/100*15,bitmojiHeight/100*15); //flower
+};
+
+var Button = function(config) {
+    this.x = config.x || 0;
+    this.y = config.y || 0;
+    this.width = config.width || 150;
+    this.height = config.height || 50;
+    this.label = config.label || "Click";
+    this.onClick = config.onClick || function() {};
+};
+
+Button.prototype.draw = function() {
+    fill(169, 143, 247);
+    rect(this.x, this.y, this.width, this.height, 5);
+    fill(0, 0, 0);
+    textSize(45);
+    text(this.label, this.x+23, this.y+this.height/1.25);
+};
+
+//checks if mouse clicks on button, got this code from Khan Academy's "A Button object type" article:
+Button.prototype.isMouseInside = function() { 
+    return mouseX > this.x &&
+           mouseX < (this.x + this.width) &&
+           mouseY > this.y &&
+           mouseY < (this.y + this.height);
+};
+
+Button.prototype.handleMouseClick = function() {
+    if (this.isMouseInside()) {
+        this.onClick();
+    }
+};
+//start button function
+var startButton = new Button({ 
+    x: 116,
+    y: 288,
+    label: "Start!",
+    onClick: function() {
+    currentScene = 1;
+    startTime = millis();
+    }
+});
+var splashScreen = function() //splash screen function, scene: 0
+{
+    background(11, 17, 43);
+    for (var i = 0; i < xPositions.length; i++) 
+        {
+            noStroke(); // no outline for the raindrops
+            fill(starColor[i]);
+            ellipse(xPositions[i], yPositions[i], 5, 5);
+        yPositions[i] += starSpeed; //falling motion
+        if (yPositions[i]>410 )// Condition to send it to the top 
+        {     
+            yPositions[i]=round(random(-100,0));
+            xPositions[i]=round(random(10,390));
+        }
+        }
+    fill(112, 242, 72);
+    ellipse(192,167,277,133);
+    fill(0, 197, 227);
+    ellipse(192,167,245,116);
+    fill(0, 0, 0);
+    ellipse(192,167,209,105);
+    fill(252, 0, 0);
+    textSize(57);
+    text("Galaga", 98,145,200,100);
+    fill(255, 242, 0);
+    textSize(54);
+    text("Galaga", 103,145,200,100);
+    fill(3, 130, 26);
+    textSize(53);
+    text("Galaga", 105,145,200,100);
+    image(getImage("space/star"),229,119,30,30);
+    image(getImage("space/star"),214,118,20,20);
+    image(getImage("space/star"),257,131,20,20);
+    image(getImage("space/star"),129,189,25,25);
+    startButton.draw();
+    drawBitmoji(2,-13,50); //Isabella's bitmoji
+    drawbit(264,-13,115); //Todd's bitmoji
+};
+
+var endScreen = function()
+{
+    background(11, 17, 43);
+    for (var i = 0; i < xPositions.length; i++) 
+        {
+            noStroke(); // no outline for the raindrops
+            fill(starColor[i]);
+            ellipse(xPositions[i], yPositions[i], 5, 5);
+            yPositions[i] += starSpeed; //falling motion
+        if (yPositions[i]>410 )// Condition to send it to the top 
+        {     
+            yPositions[i]=round(random(-100,0));
+            xPositions[i]=round(random(10,390));
+        }
+        }
+    fill(255, 0, 0);
+    textSize(15);
+    text("YOUR SCORE:" + score, 124,8,200,100); //displays score
+};
+draw = function() { //draw function for the scenes
+    if (currentScene === 0)
+    {
+        splashScreen();
+    } 
+    else if (currentScene === 2)
+    {   
+        endScreen();
+    }
+};
+
+mouseClicked = function() {
+    startButton.handleMouseClick();
+    if (currentScene === 0) //mouse clicked for start button
+    {
+        startButton.handleMouseClick(); 
+    }
+};
