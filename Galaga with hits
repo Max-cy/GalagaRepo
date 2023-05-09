@@ -1,0 +1,215 @@
+var scene = 1;
+var stillPlaying = true;
+noStroke();
+var bee2s=0;
+var bee3s=0;
+var f=0;
+var z=0;
+var d=0;
+var g=0;
+var c=0;
+var x=0;
+
+var bomb = function(x,y,j){
+this.x=x;
+this.y=y;
+this.j=j;
+};
+
+
+var ship = function(x,y){
+this.x=x;
+this.y=y;
+};
+
+var shot= function(x,y,g)
+{this.x = x;
+this.y = y;
+this.g =g;
+};
+
+var bee = function(x,y,s,p) {
+    this.x = x;
+    this.y = y;
+    this.s = s;
+    this.p = p;
+};
+
+var bee2 = function(x,y,s,p) {
+    this.x = x;
+    this.y = y;
+    this.s = s;
+    this.p = p;
+};
+var bee3 = function(x,y,s,p) {
+    this.x = x;
+    this.y = y;
+    this.s = s;
+    this.p = p;
+};
+
+shot.prototype.draw= function() {
+    fill(0, 0, 0);
+    rect(this.x,this.y,10,30,20);
+    fill(255, 255, 255);
+};
+
+bomb.prototype.draw = function() {
+    image(getImage("avatars/starky-seed"),this.x, this.y,20,20);
+    rect(this.x,this.y-30,20,30);
+};
+
+ship.prototype.draw= function() {
+    image(getImage("space/rocketship"),this.x,this.y,40,40);
+};
+bee.prototype.draw= function() {
+  image(getImage("avatars/robot_male_1"),this.x,this.y,40,40);
+};
+
+bee2.prototype.draw= function() {
+  image(getImage("avatars/robot_male_2"),this.x,this.y,40,40);
+};
+
+bee3.prototype.draw= function() {
+  image(getImage("avatars/robot_male_3"),this.x,this.y,40,40);
+};
+shot.prototype.CH = function(bees){
+ if ((bees.x >= this.x && bees.x <= (this.x + 40)) &&
+        (bees.y >= this.y && bees.y <= (this.y + 40))){bees.y = -400; bees.p=4;this.x =-100;d++;}
+};
+shot.prototype.CH2 = function(beez){
+ if ((beez.x >= this.x && beez.x <= (this.x + 40)) &&
+        (beez.y >= this.y && beez.y <= (this.y + 40))){beez.y = -400; beez.p=4;this.x =-100;g++;}
+};
+shot.prototype.CH3 = function(beed){
+ if ((beed.x >= this.x && beed.x <= (this.x + 40)) &&
+        (beed.y >= this.y && beed.y <= (this.y + 40))){beed.y = -400; beed.p=4;this.x =-100;c++;}
+};
+
+
+var ships = [];
+for(var i=0; i<3; i++){
+    ships.push(new ship(240+60*i,360));}
+var bees = [];
+for (var i=0; i<8; i++) {
+    bees.push(new bee(290, i *-40,1,0));}
+    
+var beez = [];
+for (var i=0; i<6; i++) {
+    beez.push(new bee2(290, i *-50,1,0));}
+    
+    var beed = [];
+for (var i=0; i<4; i++) {
+    beed.push(new bee3(290, i *-60,1,0));}
+    
+ var Shot = new shot(-162,320,0);
+ var bomb1 = new bomb(-100,120);
+ var bomb2 = new bomb(-100,120);
+ var bomb3 = new bomb(-100,120);
+ 
+
+draw= function() {
+    if(stillPlaying && scene === 1) //Game screen
+    {
+       Shot.draw();
+       bomb1.draw();
+       bomb2.draw();
+       bomb3.draw();
+       
+        if(Shot.g === 1){rect(Shot.x,Shot.y+40,40,80);Shot.x=ships[0].x; Shot.y =ships[0].y; Shot.g =2;}
+        if(Shot.g === 2){
+            if(Shot.y < -40){z=0;}
+            (rect(Shot.x,Shot.y+40,40,80));Shot.y-=20;
+        }
+        
+        
+       for(var i=0; i<ships.length; i++) //player ships
+       {
+           ships[0].y=320;
+           rect(ships[i].x-10,ships[i].y,80,45);
+           ships[i].draw();
+           if (keyIsPressed && keyCode === UP && z === 0 && f === 1){ Shot.g=1; z=1;}
+           
+           if (keyIsPressed && keyCode === LEFT && ships[0].x>=0){ships[0].x-=5;}
+           if (keyIsPressed && keyCode === RIGHT && ships[0].x<=360){ships[0].x+=5;}
+       }
+       
+       
+        for(var i=0; i<bees.length; i++)//smallest bee's
+        {
+            bees[i].draw();
+           Shot.CH(bees[i]);
+            if(bees[i].p === 0){rect(bees[i].x,bees[i].y-40,40,45);bees[i].y += 5;
+            if(bees[i].y === 200){bees[i].p=1;}}
+            if(bees[i].p === 1){rect(bees[i].x+35,bees[i].y,40,40);bees[i].x -= 5;}
+            if(bees[i].x === -40){bees[i].p=2;}
+            if(bees[i].p === 2){bees[i].y=100; 
+            if(bees[i].x<380){rect(bees[i].x-35,bees[i].y,40,40);bees[i].x+=5;}
+          if(bees[i].x>=380){bees[i].p=3;
+          if(x===0){x=1;}
+          if(x===4){x=5;}
+          }
+            }
+            if(bees[i].p===3){rect(bees[i].x+35,bees[i].y,40,40);bees[i].x-=5;
+            if(bees[i].x<20){bees[i].p=2;bee2s=1;
+            if(x===2){x=3;}
+            }
+            } 
+        
+            }
+            
+            if(bee2s === 1){
+            for(var i=0; i<beez.length; i++)//medium bee's
+            {
+            beez[i].draw();
+            Shot.CH2(beez[i]);
+            if(beez[i].p === 0){rect(beez[i].x,beez[i].y-40,40,45);beez[i].y += 5;
+            if(beez[i].y === 200){beez[i].p=1;}}
+            if(beez[i].p === 1){rect(beez[i].x+35,beez[i].y,40,40);beez[i].x -= 5;}
+            if(beez[i].x === -40){beez[i].p=2;}
+            if(beez[i].p === 2){beez[i].y=60; 
+            if(beez[i].x<380){rect(beez[i].x-35,beez[i].y,40,40);beez[i].x+=7;}
+          if(beez[i].x>=380){beez[i].p=3;}
+            }
+            if(beez[i].p===3){rect(beez[i].x+35,beez[i].y,40,40);beez[i].x-=7;
+            if(beez[i].x<20){beez[i].p=2;bee3s=1;}
+            } 
+            }
+   }if(bee3s === 1){
+            for(var i=0; i<beed.length; i++)//large bee's
+            {
+            beed[i].draw();
+            Shot.CH3(beed[i]);
+            if(beed[i].p === 0){rect(beed[i].x,beed[i].y-40,40,45);beed[i].y += 5;
+            if(beed[i].y === 200){beed[i].p=1;}}
+            if(beed[i].p === 1){rect(beed[i].x+35,beed[i].y,40,40);beed[i].x -= 5;}
+            if(beed[i].x === -40){beed[i].p=2;}
+            if(beed[i].p === 2){beed[i].y=20; 
+            if(beed[i].x<380){rect(beed[i].x-40,beed[i].y,40,40);beed[i].x+=8;}
+          if(beed[i].x>=380){beed[i].p=3;}
+            }
+            if(beed[i].p===3){rect(beed[i].x+40,beed[i].y,60,40);beed[i].x-=8;f=1;
+            if(beed[i].x<20){beed[i].p=2;}
+            } 
+            } }
+    
+}
+
+if(x===6){x=0;}
+if(x===1){bomb1.y= 120; bomb1.x=random(10,380);bomb1.j=1;x=2;}
+
+if(x===3){bomb2.y= 120; bomb2.x=random(10,380);bomb2.j=1;x=4;}
+
+if(x===5){bomb3.y= 120; bomb3.x=random(10,380);bomb3.j=1;x=6;}
+
+if(bomb1.j===1){bomb1.y+=5;}
+if(bomb2.j===1){bomb2.y+=5;}
+if(bomb3.j===1){bomb3.y+=5;}
+
+
+if(d === 8){fill(255, 255, 255);rect(-1,95,381,73);}
+if(g === 6 && d === 8 ){fill(255, 255, 255);rect(-1,63,381,73);}
+if(c === 4 && g === 6){fill(255, 255, 255);rect(-1,-5,381,73);}
+if(d === 8 && g===6 && c===4){}  // This = win
+
+};
