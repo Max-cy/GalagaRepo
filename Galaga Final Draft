@@ -1,0 +1,492 @@
+
+var stillPlaying = true;
+noStroke();
+var bee2s=0;
+var bee3s=0;
+var f=0;
+var z=0;
+var d=0;
+var g=0;
+var c=0;
+var x=0;
+//global variables
+var xPositions=[];
+var yPositions=[];
+var numStars = 100;
+var starColor = [];
+var currentScene = 0;
+var startTime = [];
+var score =[];
+var starSpeed = 4;
+
+for (var i = 1; i <= numStars; ++i) // stars details
+{
+    xPositions.push(round(random(10,390)));
+    yPositions.push(round(random(10,390)));
+    starColor.push(color(random(0,255),random(0,255),random(0,255))); //variety of colors
+}
+
+var drawbit= function(x,y,h) {
+    noStroke();
+fill(255, 243, 204);
+ellipse(x+(h/150*100),y+(h/150*100),(h/150*83),(h/150*101));
+noStroke();
+fill(184, 149, 83);
+arc(x+(h/150*100),y+(h/150*69),(h/150*90),(h/150*30),-30,220);
+ellipse(x+(h/150*65),y+(h/150*90),(h/150*10),(h/150*40));
+ellipse(x+(h/150*135),y+(h/150*90),(h/150*10),(h/150*40));
+fill(255, 0, 255);
+ellipse(x+(h/150*100),y+(h/150*60),(h/150*100),(h/150*20));
+quad(x+(h/150*60), y+(h/150*60), x+(h/150*140), y+(h/150*60), x+(h/150*120), y+(h/150*30), x+(h/150*80), y+(h/150*30));
+fill(5, 128, 95);
+ellipse(x+(h/150*115),y+(h/150*90),(h/150*10),(h/150*10));
+ellipse(x+(h/150*85),y+(h/150*90),(h/150*10),(h/150*10));
+fill(0, 0, 0);
+ellipse(x+(h/150*115),y+(h/150*90),(h/150*5),(h/150*5));
+ellipse(x+(h/150*85),y+(h/150*90),(h/150*5),(h/150*5));
+stroke(0, 0, 0);
+fill(255,243,204);
+arc(x+(h/150*95),y+(h/150*110),(h/150*30),(h/150*30),-60,20);
+fill(255, 255, 255);
+arc(x+(h/150*100),y+(h/150*120),(h/150*40),(h/150*20),-2,180);
+line(x+(h/150*80),y+(h/150*120),x+(h/150*120),y+(h/150*120));
+}; // Todd's bitmoji function
+
+var drawBitmoji=function(x,y,bitmojiHeight) // Isabella's bitmoji function
+{
+    //start of bitmoji
+    fill(26, 2, 2);
+    ellipse(x+(bitmojiHeight/100*100),y+(bitmojiHeight/100*90),bitmojiHeight/100*90,bitmojiHeight/100*100);
+    rect(x+(bitmojiHeight/100*55),y+(bitmojiHeight/100*101),bitmojiHeight/100*90,bitmojiHeight/100*100);
+    fill(255, 219, 172);
+    noStroke();
+    rect(x+(bitmojiHeight/100*87),y+(bitmojiHeight/100*147),bitmojiHeight/100*24,bitmojiHeight/100*53); //neck  
+    stroke(13, 6, 6);
+    ellipse(x+(bitmojiHeight/100*100),y+(bitmojiHeight/100*100),bitmojiHeight/100*83,bitmojiHeight/100*100); //head 
+    noStroke();
+    fill(255, 219, 172); //skin color
+    quad(x+(bitmojiHeight/100*87),y+(bitmojiHeight/100*167),x+(bitmojiHeight/100*113),y+(bitmojiHeight/100*168),x+(bitmojiHeight/100*146),y+(bitmojiHeight/100*202),x+(bitmojiHeight/100*54),y+(bitmojiHeight/100*204)); //shoulders/chest
+    stroke(10, 0, 0);
+    fill(255, 219, 172); //skin color
+    triangle(x+(bitmojiHeight/100*84),y+(bitmojiHeight/100*169),x+(bitmojiHeight/100*114),y+(bitmojiHeight/100*169),x+(bitmojiHeight/100*99),y+(bitmojiHeight/100*192));
+    stroke(5, 0, 0); //eye outline
+    fill(247, 244, 244);
+    ellipse(x+(bitmojiHeight/100*82),y+(bitmojiHeight/100*100),bitmojiHeight/100*19,bitmojiHeight/100*6); //left eye
+    ellipse(x+(bitmojiHeight/100*118),y+(bitmojiHeight/100*100),bitmojiHeight/100*19,bitmojiHeight/100*6); //right eye
+    fill(80, 99, 54); // eye color
+    ellipse(x+(bitmojiHeight/100*82),y+(bitmojiHeight/100*100),bitmojiHeight/100*4,bitmojiHeight/100*6); // iris
+    ellipse(x+(bitmojiHeight/100*118),y+(bitmojiHeight/100*100),bitmojiHeight/100*4,bitmojiHeight/100*6); //iris
+    fill(26, 2, 2); //hair color
+    line(x+(bitmojiHeight/100*80),y+(bitmojiHeight/100*98),x+(bitmojiHeight/100*77),y+(bitmojiHeight/100*94)); //eyelashes
+    line(x+(bitmojiHeight/100*76),y+(bitmojiHeight/100*98),x+(bitmojiHeight/100*74),y+(bitmojiHeight/100*94));
+    line(x+(bitmojiHeight/100*72),y+(bitmojiHeight/100*98),x+(bitmojiHeight/100*70),y+(bitmojiHeight/100*94));
+    line(x+(bitmojiHeight/100*123),y+(bitmojiHeight/100*98),x+(bitmojiHeight/100*128),y+(bitmojiHeight/100*94));
+    line(x+(bitmojiHeight/100*128),y+(bitmojiHeight/100*99),x+(bitmojiHeight/100*131),y+(bitmojiHeight/100*96));
+    line(x+(bitmojiHeight/100*118),y+(bitmojiHeight/100*98),x+(bitmojiHeight/100*123),y+(bitmojiHeight/100*94));
+    bezier(x+(bitmojiHeight/100*48), y+(bitmojiHeight/100*164), x+(bitmojiHeight/100*89), y+(bitmojiHeight/100*101), x+(bitmojiHeight/100*53), y+(bitmojiHeight/100*42), x+(bitmojiHeight/100*76), y+(bitmojiHeight/100*55)); //hair strands
+    bezier(x+(bitmojiHeight/100*52), y+(bitmojiHeight/100*191), x+(bitmojiHeight/100*73), y+(bitmojiHeight/100*125), x+(bitmojiHeight/100*52), y+(bitmojiHeight/100*36), x+(bitmojiHeight/100*70), y+(bitmojiHeight/100*67));
+    bezier(x+(bitmojiHeight/100*53), y+(bitmojiHeight/100*168), x+(bitmojiHeight/100*89), y+(bitmojiHeight/100*101), x+(bitmojiHeight/100*53), y+(bitmojiHeight/100*42), x+(bitmojiHeight/100*58), y+(bitmojiHeight/100*91));
+    bezier(x+(bitmojiHeight/100*146), y+(bitmojiHeight/100*241), x+(bitmojiHeight/100*188), y+(bitmojiHeight/100*6), x+(bitmojiHeight/100*77), y+(bitmojiHeight/100*53), x+(bitmojiHeight/100*134), y+(bitmojiHeight/100*59));
+    noStroke(); 
+    fill(255, 219, 172); //hair color
+    //bezier(122, 66, 128, 48, 145, 114, 130, 124); //hair strands
+    fill(23, 20, 20); //shirt color (black)
+    rect(x+(bitmojiHeight/100*56),y+(bitmojiHeight/100*198),bitmojiHeight/100*91,bitmojiHeight/100*26); //shirt
+    fill(255, 255, 255);
+    text("IM",x+(bitmojiHeight/100*91),y+(bitmojiHeight/100*207),bitmojiHeight/100*355,bitmojiHeight/100*83);
+    stroke(5, 0, 0);
+    fill(255, 219, 172);
+    arc(x+(bitmojiHeight/100*82),y+(bitmojiHeight/100*90),bitmojiHeight/100*26,bitmojiHeight/100*5,202,334); //left eyebrow
+    arc(x+(bitmojiHeight/100*118),y+(bitmojiHeight/100*89),bitmojiHeight/100*27,bitmojiHeight/100*5,214,372); //right eyebrow
+    ellipse(x+(bitmojiHeight/100*99),y+(bitmojiHeight/100*118),bitmojiHeight/100*13,bitmojiHeight/100*6); //nose
+    noStroke();
+    fill(255, 130, 180); //lip color
+    ellipse(x+(bitmojiHeight/100*99),y+(bitmojiHeight/100*132),bitmojiHeight/100*21,bitmojiHeight/100*11); //lips
+    stroke(26, 19, 19); //smile line
+    arc(x+(bitmojiHeight/100*86),y+(bitmojiHeight/100*129),bitmojiHeight/100*101,bitmojiHeight/100*6,58,92); //smile line
+    fill(117, 22, 43); //necklace color
+    ellipse(x+(bitmojiHeight/100*99),y+(bitmojiHeight/100*197),bitmojiHeight/100*11,bitmojiHeight/100*12); //necklace shap3
+    fill(181, 23, 113); //flower color
+    ellipse(x+(bitmojiHeight/100*57),y+(bitmojiHeight/100*64),bitmojiHeight/100*15,bitmojiHeight/100*15); //flower petals
+    ellipse(x+(bitmojiHeight/100*78),y+(bitmojiHeight/100*64),bitmojiHeight/100*15,bitmojiHeight/100*15);
+    ellipse(x+(bitmojiHeight/100*62),y+(bitmojiHeight/100*75),bitmojiHeight/100*15,bitmojiHeight/100*15);
+    ellipse(x+(bitmojiHeight/100*74),y+(bitmojiHeight/100*74),bitmojiHeight/100*15,bitmojiHeight/100*15);
+    ellipse(x+(bitmojiHeight/100*63),y+(bitmojiHeight/100*56),bitmojiHeight/100*15,bitmojiHeight/100*15);
+    ellipse(x+(bitmojiHeight/100*74),y+(bitmojiHeight/100*56),bitmojiHeight/100*15,bitmojiHeight/100*15);
+    fill(255, 237, 171);
+    ellipse(x+(bitmojiHeight/100*68),y+(bitmojiHeight/100*64),bitmojiHeight/100*15,bitmojiHeight/100*15); //flower
+};
+
+var Button = function(config) {
+    this.x = config.x || 0;
+    this.y = config.y || 0;
+    this.width = config.width || 150;
+    this.height = config.height || 50;
+    this.label = config.label || "Click";
+    this.onClick = config.onClick || function() {};
+};
+
+Button.prototype.draw = function() {
+    fill(42, 0, 166);
+    rect(this.x, this.y, this.width, this.height, 5);
+    fill(0, 0, 0);
+    textSize(45);
+    text(this.label, this.x+23, this.y+this.height/1.25);
+};
+
+//checks if mouse clicks on button, got this code from Khan Academy's "A Button object type" article:
+Button.prototype.isMouseInside = function() { 
+    return mouseX > this.x &&
+           mouseX < (this.x + this.width) &&
+           mouseY > this.y &&
+           mouseY < (this.y + this.height);
+};
+
+Button.prototype.handleMouseClick = function() {
+    if (this.isMouseInside()) {
+        this.onClick();
+    }
+};
+//start button function
+var startButton = new Button({ 
+    x: 116,
+    y: 288,
+    label: "Start!",
+    onClick: function() {
+    currentScene = 1;
+    startTime = millis();
+    }
+});
+var splashScreen = function() //splash screen function, scene: 0
+{
+    background(0, 0, 0);
+    for (var i = 0; i < xPositions.length; i++) 
+        {
+            noStroke(); // no outline for the raindrops
+            fill(starColor[i]);
+            ellipse(xPositions[i], yPositions[i], 5, 5);
+        yPositions[i] += starSpeed; //falling motion
+        if (yPositions[i]>410 )// Condition to send it to the top 
+        {     
+            yPositions[i]=round(random(-100,0));
+            xPositions[i]=round(random(10,390));
+        }
+        }
+    fill(112, 242, 72);
+    ellipse(192,167,277,133);
+    fill(0, 197, 227);
+    ellipse(192,167,245,116);
+    fill(0, 0, 0);
+    ellipse(192,167,209,105);
+    fill(252, 0, 0);
+    textSize(57);
+    text("Galaga", 98,145,200,100);
+    fill(255, 242, 0);
+    textSize(54);
+    text("Galaga", 103,145,200,100);
+    fill(3, 130, 26);
+    textSize(53);
+    text("Galaga", 105,145,200,100);
+    image(getImage("space/star"),229,119,30,30);
+    image(getImage("space/star"),214,118,20,20);
+    image(getImage("space/star"),257,131,20,20);
+    image(getImage("space/star"),129,189,25,25);
+    startButton.draw();
+    drawBitmoji(2,-13,50); //Isabella's bitmoji
+    drawbit(264,-13,115); //Todd's bitmoji
+    fill(255, 255, 255);
+    textSize(12);
+    text("By: Todd Maxcy & Isabella Morgan",200,380,300,100);
+    fill(0, 179, 87);
+    textSize(15);
+    text("INSERT COIN",138,251,100,100);
+    fill(255, 0, 0);
+    text("CREDIT: 50",7,380,100,100);
+    textSize(10);
+    text("namco '81", 200,202,100,100);
+    
+};
+
+var endScreen = function()
+{
+    background(0, 0, 0);
+    for (var i = 0; i < xPositions.length; i++) 
+        {
+            noStroke(); // no outline for the raindrops
+            fill(starColor[i]);
+            ellipse(xPositions[i], yPositions[i], 5, 5);
+            yPositions[i] += starSpeed; //falling motion
+        if (yPositions[i]>410 )// Condition to send it to the top 
+        {     
+            yPositions[i]=round(random(-100,0));
+            xPositions[i]=round(random(10,390));
+        }
+        }
+    fill(255, 0, 0);
+    textSize(57);
+    text("YOU WIN", 76,183,345,158); //displays score
+};
+
+var loseScreen = function()
+{
+    background(0, 0, 0);
+    for (var i = 0; i < xPositions.length; i++) 
+        {
+            noStroke(); // no outline for the raindrops
+            fill(starColor[i]);
+            ellipse(xPositions[i], yPositions[i], 5, 5);
+            yPositions[i] += starSpeed; //falling motion
+        if (yPositions[i]>410 )// Condition to send it to the top 
+        {     
+            yPositions[i]=round(random(-100,0));
+            xPositions[i]=round(random(10,390));
+        }
+        }
+    fill(255, 0, 0);
+    textSize(57);
+    text("YOU LOSE", 50,186,345,158); //displays score
+};
+
+var bomb = function(x,y,j){
+this.x=x;
+this.y=y;
+this.j=j;
+};
+
+
+var ship = function(x,y,k){
+this.x=x;
+this.y=y;
+this.k=k;
+};
+
+var shot= function(x,y,g)
+{this.x = x;
+this.y = y;
+this.g =g;
+};
+
+var bee = function(x,y,s,p) {
+    this.x = x;
+    this.y = y;
+    this.s = s;
+    this.p = p;
+};
+
+var bee2 = function(x,y,s,p) {
+    this.x = x;
+    this.y = y;
+    this.s = s;
+    this.p = p;
+};
+var bee3 = function(x,y,s,p) {
+    this.x = x;
+    this.y = y;
+    this.s = s;
+    this.p = p;
+};
+
+shot.prototype.draw= function() {
+    fill(0, 255, 13);
+    rect(this.x,this.y,10,30,20);
+    
+};
+
+bomb.prototype.draw = function() {
+    image(getImage("avatars/piceratops-seed"),this.x, this.y,40,40);
+    
+};
+
+ship.prototype.draw= function() {
+    image(getImage("space/rocketship"),this.x,this.y,40,40);
+};
+bee.prototype.draw= function() {
+  image(getImage("avatars/robot_male_1"),this.x,this.y,40,40);
+};
+
+bee2.prototype.draw= function() {
+  image(getImage("avatars/robot_male_2"),this.x,this.y,40,40);
+};
+
+bee3.prototype.draw= function() {
+  image(getImage("avatars/robot_male_3"),this.x,this.y,40,40);
+};
+shot.prototype.CH = function(bees){
+ if ((bees.x >= this.x && bees.x <= (this.x + 40)) &&
+        (bees.y >= this.y && bees.y <= (this.y + 40))){bees.y = -400; bees.p=4;this.x =-100;d++;}
+};
+shot.prototype.CH2 = function(beez){
+ if ((beez.x >= this.x && beez.x <= (this.x + 40)) &&
+        (beez.y >= this.y && beez.y <= (this.y + 40))){beez.y = -400; beez.p=4;this.x =-100;g++;}
+};
+shot.prototype.CH3 = function(beed){
+ if ((beed.x >= this.x && beed.x <= (this.x + 40)) &&
+        (beed.y >= this.y && beed.y <= (this.y + 40))){beed.y = -400; beed.p=4;this.x =-100;c++;}
+};
+bomb.prototype.CFH = function(ships){
+if(ships.x >= this.x && ships.x <= (this.x + 40) && ships.y >= this.y && ships.y <= (this.y +40)){
+    ships.x=-100; currentScene=3;
+}
+};
+
+var ships = [];
+for(var i=0; i<1; i++){
+    ships.push(new ship(240+60*i,360));}
+var bees = [];
+for (var i=0; i<8; i++) {
+    bees.push(new bee(290, i *-40,1,0));}
+    
+var beez = [];
+for (var i=0; i<6; i++) {
+    beez.push(new bee2(290, i *-50,1,0));}
+    
+    var beed = [];
+for (var i=0; i<4; i++) {
+    beed.push(new bee3(290, i *-60,1,0));}
+    
+ var Shot = new shot(-162,320,0);
+ var bomb1 = new bomb(-100,120);
+ var bomb2 = new bomb(-100,120);
+ var bomb3 = new bomb(-100,120);
+ 
+
+draw= function() {
+    if(stillPlaying && currentScene === 0){
+        splashScreen();
+    }
+    if(stillPlaying && currentScene === 1)//Game screen
+    {
+        background(8, 8, 8);
+         for (var i = 0; i < xPositions.length; i++) 
+        {
+            noStroke(); // no outline for the raindrops
+            fill(starColor[i]);
+            ellipse(xPositions[i], yPositions[i], 5, 5);
+            yPositions[i] += starSpeed; //falling motion
+        if (yPositions[i]>410 )// Condition to send it to the top 
+        {     
+            yPositions[i]=round(random(-100,0));
+            xPositions[i]=round(random(10,390));
+        }
+        }
+       Shot.draw();
+       bomb1.draw();
+       bomb2.draw();
+       bomb3.draw();
+       
+        if(Shot.g === 1){Shot.x=ships[0].x; Shot.y =ships[0].y; Shot.g =2;}
+        if(Shot.g === 2){
+            if(Shot.y < -40){z=0;}
+            Shot.y-=20;
+        }
+        
+        
+       for(var i=0; i<ships.length; i++) //player ships
+       {
+           ships[0].y=320;
+            bomb1.CFH(ships[0]);
+             bomb2.CFH(ships[0]);
+              bomb3.CFH(ships[0]);
+           ships[i].draw();
+     if(ships[0].k===1){
+           if (keyIsPressed && keyCode === UP && z === 0 && f === 1){ Shot.g=1; z=1;}
+           
+           if (keyIsPressed && keyCode === LEFT && ships[0].x>=0){ships[0].x-=5;}
+           if (keyIsPressed && keyCode === RIGHT  && ships[0].x<=360) {ships[0].x+=5;}
+       }}
+       
+       
+        for(var i=0; i<bees.length; i++)//smallest bee's
+        {
+            bees[i].draw();
+           Shot.CH(bees[i]);
+            if(bees[i].p === 0){bees[i].y += 5;
+            if(bees[i].y === 200){bees[i].p=1;}}
+            if(bees[i].p === 1){bees[i].x -= 5;}
+            if(bees[i].x === -40){bees[i].p=2;}
+            if(bees[i].p === 2){bees[i].y=100; 
+            if(bees[i].x<380){bees[i].x+=5;}
+          if(bees[i].x>=380){bees[i].p=3;
+          if(x===0){x=1;}
+          if(x===4){x=5;}
+          }
+            }
+            if(bees[i].p===3){bees[i].x-=5;
+            if(bees[i].x<20){bees[i].p=2;bee2s=1;
+            if(x===2){x=3;}
+            }
+            } 
+        
+            }
+            
+            if(bee2s === 1){
+            for(var i=0; i<beez.length; i++)//medium bee's
+            {
+            beez[i].draw();
+            Shot.CH2(beez[i]);
+            if(beez[i].p === 0){beez[i].y += 5;
+            if(beez[i].y === 200){beez[i].p=1;}}
+            if(beez[i].p === 1){beez[i].x -= 5;}
+            if(beez[i].x === -40){beez[i].p=2;}
+            if(beez[i].p === 2){beez[i].y=60; 
+            if(beez[i].x<380){beez[i].x+=7;}
+          if(beez[i].x>=380){beez[i].p=3;
+           if(d===8){if(x===0){x=1;}
+          if(x===4){x=5;}}
+          }
+            }
+            if(beez[i].p===3){beez[i].x-=7;
+            if(beez[i].x<20){beez[i].p=2;bee3s=1;
+             if(d===8){if(x===2){x=3;}}
+            }
+            } 
+            }
+   }if(bee3s === 1){
+            for(var i=0; i<beed.length; i++)//large bee's
+            {
+            beed[i].draw();
+            Shot.CH3(beed[i]);
+            if(beed[i].p === 0){beed[i].y += 5;
+            if(beed[i].y === 200){beed[i].p=1;}}
+            if(beed[i].p === 1){beed[i].x -= 5;}
+            if(beed[i].x === -40){beed[i].p=2;}
+            if(beed[i].p === 2){beed[i].y=20; 
+            if(beed[i].x<380){beed[i].x+=8;}
+          if(beed[i].x>=380){beed[i].p=3;
+           if(g===6){if(x===0){x=1;}
+          if(x===4){x=5;}}
+          }
+            }
+            if(beed[i].p===3){beed[i].x-=8;f=1;ships[0].k=1;
+            if(beed[i].x<20){beed[i].p=2;
+            if(g===6){ if(x===2){x=3;}}
+            }
+            } 
+            } }
+    
+}
+if(f===1){
+if(x===6){x=0;}
+if(x===1){bomb1.y= 120; bomb1.x=random(10,380);bomb1.j=1;x=2;}
+
+if(x===3){bomb2.y= 120; bomb2.x=random(10,380);bomb2.j=1;x=4;}
+
+if(x===5){bomb3.y= 120; bomb3.x=random(10,380);bomb3.j=1;x=6;}
+
+if(bomb1.j===1){bomb1.y+=5;}
+if(bomb2.j===1){bomb2.y+=5;}
+if(bomb3.j===1){bomb3.y+=5;}
+}
+
+if(d >= 8 && g >= 6 && c >= 4){endScreen();}  // This = win
+if(currentScene === 3){loseScreen();}
+    
+
+};
+mouseClicked = function() {
+    startButton.handleMouseClick();
+    if (currentScene === 0) //mouse clicked for start button
+    {
+        startButton.handleMouseClick(); 
+    }
+};
