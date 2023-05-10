@@ -325,7 +325,7 @@ shot.prototype.CH3 = function(beed){
 };
 bomb.prototype.CFH = function(ships){
 if(ships.x >= this.x && ships.x <= (this.x + 40) && ships.y >= this.y && ships.y <= (this.y +40)){
-    ships.x=-100; currentScene=3;
+    ships.x=-100; currentScene=3; ships.k=0;
 }
 };
 
